@@ -14,7 +14,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Entity
 @Table(name = TableCorporateConstant.TABLE_COURSE)
 @Data
-public class CouseEntity implements Serializable {
+public class CourseEntity implements Serializable {
 
     @Id
     @Column(name = "id", unique = true, nullable = false, precision = 8)

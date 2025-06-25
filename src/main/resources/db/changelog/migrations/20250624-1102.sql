@@ -4,7 +4,7 @@
 -- Creates the ENUM type for the "category" field in the "courses" table
 CREATE TYPE course_category AS ENUM ('BACKEND', 'FRONTEND', 'FULLSTACK', 'MOBILE', 'DATA_SCIENCE', 'IA', 'DEVOPS', 'OTHERS');
 
--- Create table courses
+-- Create ta ble courses
 CREATE TABLE courses (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(200) NOT NULL,
