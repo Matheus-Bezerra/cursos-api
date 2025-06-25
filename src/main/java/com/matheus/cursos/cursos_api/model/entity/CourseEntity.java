@@ -1,7 +1,7 @@
 package com.matheus.cursos.cursos_api.model.entity;
 
 import com.matheus.cursos.cursos_api.model.constants.TableCorporateConstant;
-import com.matheus.cursos.cursos_api.model.enums.CouseCategoryEnum;
+import com.matheus.cursos.cursos_api.model.enums.CourseCategoryEnum;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -25,8 +25,8 @@ public class CourseEntity implements Serializable {
     private String name;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 500)
-    private CouseCategoryEnum category;
+    @Column(nullable = false)
+    private CourseCategoryEnum category;
 
     private Boolean active;
 

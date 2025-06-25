@@ -1,6 +1,6 @@
 package com.matheus.cursos.cursos_api.model.enums;
 
-public enum CouseCategoryEnum {
+public enum CourseCategoryEnum {
     BACKEND,
     FRONTEND,
     FULLSTACK,

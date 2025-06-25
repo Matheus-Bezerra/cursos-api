@@ -34,4 +34,11 @@ public class CourseService {
     public List<CourseResponseDTO> fetch() {
         return convertListEntityToListDTO(this.courseRepository.findAll());
     }
+
+    public CourseResponseDTO create(CourseRequestDTO body) {
+        CourseEntity courseEntity = convertDTOToEntity(body);
+        System.out.println("Creating course: " + courseEntity.toString());
+        courseEntity = this.courseRepository.save(courseEntity);
+        return convertEntityToDTO(courseEntity);
+    }
 }
