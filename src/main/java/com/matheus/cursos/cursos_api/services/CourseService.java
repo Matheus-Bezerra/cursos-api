@@ -1,5 +1,6 @@
 package com.matheus.cursos.cursos_api.services;
 
+import com.matheus.cursos.cursos_api.exceptions.CourseException;
 import com.matheus.cursos.cursos_api.model.dto.CourseRequestDTO;
 import com.matheus.cursos.cursos_api.model.dto.CourseResponseDTO;
 import com.matheus.cursos.cursos_api.model.entity.CourseEntity;
@@ -32,13 +33,37 @@ public class CourseService {
     }
 
     public List<CourseResponseDTO> fetch() {
-        return convertListEntityToListDTO(this.courseRepository.findAll());
+        return convertListEntityToListDTO(this.courseRepository.findAllByOrderByUpdatedAtDesc());
     }
 
     public CourseResponseDTO create(CourseRequestDTO body) {
         CourseEntity courseEntity = convertDTOToEntity(body);
-        System.out.println("Creating course: " + courseEntity.toString());
         courseEntity = this.courseRepository.save(courseEntity);
         return convertEntityToDTO(courseEntity);
+    }
+
+    public CourseResponseDTO update(Long id, CourseRequestDTO body) {
+        CourseEntity courseEntity = this.courseRepository.findById(id)
+                .orElseThrow(() -> new CourseException("Curso não encontrado"));
+
+        if (body.getName() != null) {
+            courseEntity.setName(body.getName());
+        }
+        if (body.getCategory() != null) {
+            courseEntity.setCategory(body.getCategory());
+        }
+        if (body.getActive() != null) {
+            courseEntity.setActive(body.getActive());
+        }
+
+        courseEntity = this.courseRepository.save(courseEntity);
+        return convertEntityToDTO(courseEntity);
+    }
+    
+    public void delete(Long id) {
+        CourseEntity courseEntity = this.courseRepository.findById(id)
+                .orElseThrow(() -> new CourseException("Curso não encontrado"));
+        
+        this.courseRepository.delete(courseEntity);
     }
 }
