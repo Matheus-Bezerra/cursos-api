@@ -1,8 +1,9 @@
 package com.matheus.cursos.cursos_api.services;
 
-import com.matheus.cursos.cursos_api.exceptions.CourseException;
+import com.matheus.cursos.cursos_api.exceptions.CourseNotFoundException;
 import com.matheus.cursos.cursos_api.model.dto.CourseRequestDTO;
 import com.matheus.cursos.cursos_api.model.dto.CourseResponseDTO;
+import com.matheus.cursos.cursos_api.model.dto.CourseUpdateDTO;
 import com.matheus.cursos.cursos_api.model.entity.CourseEntity;
 import com.matheus.cursos.cursos_api.repository.CourseRepository;
 import org.modelmapper.ModelMapper;
@@ -36,15 +37,22 @@ public class CourseService {
         return convertListEntityToListDTO(this.courseRepository.findAllByOrderByUpdatedAtDesc());
     }
 
+    public CourseResponseDTO get(long id) {
+        CourseEntity courseEntity = this.courseRepository.findById(id)
+                .orElseThrow(() -> new CourseNotFoundException("Curso não encontrado"));
+        
+        return convertEntityToDTO(courseEntity);
+    }
+
     public CourseResponseDTO create(CourseRequestDTO body) {
         CourseEntity courseEntity = convertDTOToEntity(body);
         courseEntity = this.courseRepository.save(courseEntity);
         return convertEntityToDTO(courseEntity);
     }
 
-    public CourseResponseDTO update(Long id, CourseRequestDTO body) {
+    public CourseResponseDTO update(Long id, CourseUpdateDTO body) {
         CourseEntity courseEntity = this.courseRepository.findById(id)
-                .orElseThrow(() -> new CourseException("Curso não encontrado"));
+                .orElseThrow(() -> new CourseNotFoundException("Curso não encontrado"));
 
         if (body.getName() != null) {
             courseEntity.setName(body.getName());
@@ -62,7 +70,7 @@ public class CourseService {
     
     public void delete(Long id) {
         CourseEntity courseEntity = this.courseRepository.findById(id)
-                .orElseThrow(() -> new CourseException("Curso não encontrado"));
+                .orElseThrow(() -> new CourseNotFoundException("Curso não encontrado"));
         
         this.courseRepository.delete(courseEntity);
     }

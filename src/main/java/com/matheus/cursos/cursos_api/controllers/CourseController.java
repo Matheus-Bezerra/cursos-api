@@ -1,8 +1,9 @@
 package com.matheus.cursos.cursos_api.controllers;
 
-import com.matheus.cursos.cursos_api.exceptions.CourseException;
+import com.matheus.cursos.cursos_api.exceptions.CourseNotFoundException;
 import com.matheus.cursos.cursos_api.model.dto.CourseRequestDTO;
 import com.matheus.cursos.cursos_api.model.dto.CourseResponseDTO;
+import com.matheus.cursos.cursos_api.model.dto.CourseUpdateDTO;
 import com.matheus.cursos.cursos_api.services.CourseService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,7 +48,25 @@ public class CourseController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
 
+    @GetMapping("/{id}")
+    @Operation(summary = "Buscar curso por ID", description = "Retorna os detalhes de um curso específico pelo ID")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Curso encontrado", content = {
+            @Content(schema = @Schema(implementation = CourseResponseDTO.class))
+        }),
+        @ApiResponse(responseCode = "404", description = "Curso não encontrado")
+    })
+    public ResponseEntity<Object> getCourse(@PathVariable Long id) {
+        try {
+            var course = this.courseService.get(id);
+            return ResponseEntity.ok().body(course);
+        } catch (CourseNotFoundException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping()
@@ -74,11 +93,11 @@ public class CourseController {
         @ApiResponse(responseCode = "400", description = "Erro ao atualizar curso"),
         @ApiResponse(responseCode = "404", description = "Curso não encontrado")
     })
-    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody CourseRequestDTO body) {
+    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody CourseUpdateDTO body) {
         try {
             this.courseService.update(id, body);
             return ResponseEntity.noContent().build();
-        } catch (CourseException e) {
+        } catch (CourseNotFoundException e) {
             return ResponseEntity.status(404).build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -96,12 +115,10 @@ public class CourseController {
         try {
             this.courseService.delete(id);
             return ResponseEntity.status(204).build();
-        } catch (CourseException e) {
+        } catch (CourseNotFoundException e) {
             return ResponseEntity.status(404).build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
 }
-    
