@@ -66,7 +66,7 @@ class CourseServiceTest {
     @DisplayName("Should throw exception when name is null")
     void shouldThrowExceptionWhenNameIsNull() {
         CourseRequestDTO requestDTO = new CourseRequestDTO();
-        requestDTO.setName(null); // Nome nulo
+        requestDTO.setName(null);
         requestDTO.setCategory(CourseCategoryEnum.BACKEND);
         requestDTO.setActive(true);
 
@@ -80,7 +80,7 @@ class CourseServiceTest {
     void shouldThrowExceptionWhenCategoryIsNull() {
         CourseRequestDTO requestDTO = new CourseRequestDTO();
         requestDTO.setName("Java");
-        requestDTO.setCategory(null); // Categoria nula
+        requestDTO.setCategory(null);
         requestDTO.setActive(true);
 
         when(courseDtoMapper.toDomain(requestDTO)).thenThrow(new IllegalArgumentException("A categoria do curso é obrigatória"));
@@ -94,7 +94,7 @@ class CourseServiceTest {
         CourseRequestDTO requestDTO = new CourseRequestDTO();
         requestDTO.setName("Java");
         requestDTO.setCategory(CourseCategoryEnum.BACKEND);
-        requestDTO.setActive(null); // Status nulo
+        requestDTO.setActive(null);
 
         when(courseDtoMapper.toDomain(requestDTO)).thenThrow(new IllegalArgumentException("O status do curso é obrigatório"));
 
@@ -112,7 +112,6 @@ class CourseServiceTest {
         Course existingCourse = new Course();
         existingCourse.setName("Java");
 
-        // Simula que já existe um curso com esse nome
         when(courseRepository.findByName("Java")).thenReturn(java.util.Optional.of(existingCourse));
 
         IllegalArgumentException exception = assertThrows(
@@ -206,7 +205,7 @@ class CourseServiceTest {
         course.setId(id);
 
         Course existingCourse = new Course();
-        existingCourse.setId(2L); // outro curso com mesmo nome
+        existingCourse.setId(2L);
 
         when(courseRepository.findById(id)).thenReturn(java.util.Optional.of(course));
         when(courseRepository.findByName("NomeExistente")).thenReturn(java.util.Optional.of(existingCourse));
