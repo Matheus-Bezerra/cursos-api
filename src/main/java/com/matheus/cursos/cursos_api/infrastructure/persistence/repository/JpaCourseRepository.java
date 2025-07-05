@@ -3,8 +3,6 @@ package com.matheus.cursos.cursos_api.infrastructure.persistence.repository;
 import java.util.List;
 import java.util.Optional;
 
-import javax.swing.Spring;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -32,6 +30,12 @@ public class JpaCourseRepository implements CourseRepository {
     @Override
     public Optional<Course> findById(Long id) {
         return springDataCourseRepository.findById(id)
+                .map(courseMapper::toDomain);
+    }
+
+    @Override
+    public Optional<Course> findByName(String name) {
+        return springDataCourseRepository.findByName(name)
                 .map(courseMapper::toDomain);
     }
 

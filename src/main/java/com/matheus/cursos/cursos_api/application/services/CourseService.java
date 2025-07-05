@@ -38,6 +38,10 @@ public class CourseService {
     }
 
     public CourseResponseDTO create(CourseRequestDTO body) {
+        if (courseRepository.findByName(body.getName()).isPresent()) {
+            throw new IllegalArgumentException("Já existe um curso com esse nome.");
+        }
+
         Course course = courseDtoMapper.toDomain(body);
         Course saved = this.courseRepository.save(course);
         return courseDtoMapper.toResponseDTO(saved);
@@ -47,6 +51,14 @@ public class CourseService {
        Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new CourseNotFoundException("Curso não encontrado"));
 
+        if (body.getName() != null) {
+            courseRepository.findByName(body.getName()).ifPresent(existing -> {
+                if (!existing.getId().equals(id)) {
+                    throw new IllegalArgumentException("Já existe um curso com esse nome.");
+                }
+            });
+            course.setName(body.getName());
+        }
 
         if (body.getName() != null) {
             course.setName(body.getName());
