@@ -1,8 +1,8 @@
 package com.matheus.cursos.cursos_api.adapters.rest;
 
-import com.matheus.cursos.cursos_api.application.dto.CourseRequestDTO;
-import com.matheus.cursos.cursos_api.application.dto.CourseResponseDTO;
-import com.matheus.cursos.cursos_api.application.dto.CourseUpdateDTO;
+import com.matheus.cursos.cursos_api.adapters.dto.CourseRequestDTO;
+import com.matheus.cursos.cursos_api.adapters.dto.CourseResponseDTO;
+import com.matheus.cursos.cursos_api.adapters.dto.CourseUpdateDTO;
 import com.matheus.cursos.cursos_api.application.services.CourseService;
 import com.matheus.cursos.cursos_api.domain.exceptions.CourseNotFoundException;
 

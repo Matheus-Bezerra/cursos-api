@@ -1,11 +1,11 @@
-package com.matheus.cursos.cursos_api.application.services;
+package com.matheus.cursos.cursos_api.application.mappers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.matheus.cursos.cursos_api.application.dto.CourseRequestDTO;
-import com.matheus.cursos.cursos_api.application.dto.CourseResponseDTO;
+import com.matheus.cursos.cursos_api.adapters.dto.CourseRequestDTO;
+import com.matheus.cursos.cursos_api.adapters.dto.CourseResponseDTO;
 import com.matheus.cursos.cursos_api.domain.entity.Course;
 
 @Component

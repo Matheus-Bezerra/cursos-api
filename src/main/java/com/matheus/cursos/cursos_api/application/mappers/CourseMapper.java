@@ -1,4 +1,4 @@
-package com.matheus.cursos.cursos_api.application.services;
+package com.matheus.cursos.cursos_api.application.mappers;
 
 import java.util.List;
 import java.util.stream.Collectors;

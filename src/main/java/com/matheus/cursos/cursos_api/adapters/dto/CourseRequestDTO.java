@@ -1,4 +1,4 @@
-package com.matheus.cursos.cursos_api.application.dto;
+package com.matheus.cursos.cursos_api.adapters.dto;
 
 import com.matheus.cursos.cursos_api.domain.enums.CourseCategoryEnum;
 
