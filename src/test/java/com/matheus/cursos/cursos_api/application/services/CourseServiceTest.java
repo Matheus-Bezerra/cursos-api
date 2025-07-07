@@ -1,10 +1,12 @@
 package com.matheus.cursos.cursos_api.application.services;
 
-import com.matheus.cursos.cursos_api.application.dto.CourseRequestDTO;
-import com.matheus.cursos.cursos_api.application.dto.CourseResponseDTO;
-import com.matheus.cursos.cursos_api.application.dto.CourseUpdateDTO;
+import com.matheus.cursos.cursos_api.adapters.dto.CourseRequestDTO;
+import com.matheus.cursos.cursos_api.adapters.dto.CourseResponseDTO;
+import com.matheus.cursos.cursos_api.adapters.dto.CourseUpdateDTO;
+import com.matheus.cursos.cursos_api.application.mappers.CourseDtoMapper;
 import com.matheus.cursos.cursos_api.domain.entity.Course;
 import com.matheus.cursos.cursos_api.domain.enums.CourseCategoryEnum;
+import com.matheus.cursos.cursos_api.domain.exceptions.CourseNotFoundException;
 import com.matheus.cursos.cursos_api.domain.repository.CourseRepository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -112,7 +116,7 @@ class CourseServiceTest {
         Course existingCourse = new Course();
         existingCourse.setName("Java");
 
-        when(courseRepository.findByName("Java")).thenReturn(java.util.Optional.of(existingCourse));
+        when(courseRepository.findByName("Java")).thenReturn(Optional.of(existingCourse));
 
         IllegalArgumentException exception = assertThrows(
             IllegalArgumentException.class,
@@ -135,7 +139,7 @@ class CourseServiceTest {
         CourseResponseDTO responseDTO = new CourseResponseDTO();
         responseDTO.setId(id);
 
-        when(courseRepository.findById(id)).thenReturn(java.util.Optional.of(course));
+        when(courseRepository.findById(id)).thenReturn(Optional.of(course));
         when(courseDtoMapper.toResponseDTO(course)).thenReturn(responseDTO);
 
         CourseResponseDTO result = courseService.get(id);
@@ -150,9 +154,9 @@ class CourseServiceTest {
     @DisplayName("Should throw exception when course not found on get")
     void shouldThrowExceptionWhenCourseNotFoundOnGet() {
         long id = 2L;
-        when(courseRepository.findById(id)).thenReturn(java.util.Optional.empty());
+        when(courseRepository.findById(id)).thenReturn(Optional.empty());
 
-        assertThrows(com.matheus.cursos.cursos_api.domain.exceptions.CourseNotFoundException.class,
+        assertThrows(CourseNotFoundException.class,
             () -> courseService.get(id));
         verify(courseRepository).findById(id);
     }
@@ -179,8 +183,8 @@ class CourseServiceTest {
         responseDTO.setId(id);
         responseDTO.setName("Novo Nome");
 
-        when(courseRepository.findById(id)).thenReturn(java.util.Optional.of(course));
-        when(courseRepository.findByName("Novo Nome")).thenReturn(java.util.Optional.empty());
+        when(courseRepository.findById(id)).thenReturn(Optional.of(course));
+        when(courseRepository.findByName("Novo Nome")).thenReturn(Optional.empty());
         when(courseRepository.save(course)).thenReturn(updatedCourse);
         when(courseDtoMapper.toResponseDTO(updatedCourse)).thenReturn(responseDTO);
 
@@ -207,8 +211,8 @@ class CourseServiceTest {
         Course existingCourse = new Course();
         existingCourse.setId(2L);
 
-        when(courseRepository.findById(id)).thenReturn(java.util.Optional.of(course));
-        when(courseRepository.findByName("NomeExistente")).thenReturn(java.util.Optional.of(existingCourse));
+        when(courseRepository.findById(id)).thenReturn(Optional.of(course));
+        when(courseRepository.findByName("NomeExistente")).thenReturn(Optional.of(existingCourse));
 
         IllegalArgumentException exception = assertThrows(
             IllegalArgumentException.class,
@@ -226,9 +230,9 @@ class CourseServiceTest {
     void shouldThrowExceptionWhenCourseNotFoundOnUpdate() {
         long id = 99L;
         CourseUpdateDTO updateDTO = new CourseUpdateDTO();
-        when(courseRepository.findById(id)).thenReturn(java.util.Optional.empty());
+        when(courseRepository.findById(id)).thenReturn(Optional.empty());
 
-        assertThrows(com.matheus.cursos.cursos_api.domain.exceptions.CourseNotFoundException.class,
+        assertThrows(CourseNotFoundException.class,
             () -> courseService.update(id, updateDTO));
         verify(courseRepository).findById(id);
     }
@@ -240,7 +244,7 @@ class CourseServiceTest {
         Course course = new Course();
         course.setId(id);
 
-        when(courseRepository.findById(id)).thenReturn(java.util.Optional.of(course));
+        when(courseRepository.findById(id)).thenReturn(Optional.of(course));
 
         courseService.delete(id);
 
@@ -252,9 +256,9 @@ class CourseServiceTest {
     @DisplayName("Should throw exception when course not found on delete")
     void shouldThrowExceptionWhenCourseNotFoundOnDelete() {
         long id = 99L;
-        when(courseRepository.findById(id)).thenReturn(java.util.Optional.empty());
+        when(courseRepository.findById(id)).thenReturn(Optional.empty());
 
-        assertThrows(com.matheus.cursos.cursos_api.domain.exceptions.CourseNotFoundException.class,
+        assertThrows(CourseNotFoundException.class,
             () -> courseService.delete(id));
         verify(courseRepository).findById(id);
     }
